@@ -45,7 +45,6 @@ Notes:
 This section documents the public REST endpoints for the two services and shows example curl requests.
 
 Inventory service (base: http://localhost:8081)
-![screencapture-localhost-8081-swagger-ui-index-html-2025-11-23-16_49_31.png](../../Sceenshots/screencapture-localhost-8081-swagger-ui-index-html-2025-11-23-16_49_31.png)
 
 1. http://localhost:8081/inventory/product
 
@@ -55,7 +54,6 @@ postman request POST 'http://localhost:8081/inventory/product' \
 "sku": "SKU-1",
 "name": "Test Product"
 }'
-![1.Create Product.png](../../Sceenshots/1.Create%20Product.png)
 
 2. http://localhost:8081/inventory/batch?productId=1
 
@@ -67,7 +65,6 @@ postman request POST 'http://localhost:8081/inventory/batch?productId=1' \
 "quantity": 5,
 "expiryDate": "2025-12-31"
 }'
-![2.Create Batch.png](../../Sceenshots/2.Create%20Batch.png)
 
 3. http://localhost:8081/inventory/update?handlerType=default
 
@@ -79,22 +76,18 @@ postman request POST 'http://localhost:8081/inventory/update?handlerType=default
 "batchQuantityToDeduct": {
 "BATCH-1": 3
 }
-}
+}'
 
-![4.Inventory Update.png](../../Sceenshots/4.Inventory%20Update.png)
 
 4. postman request GET
    http://localhost:8081/inventory/batches?sku=SKU-1
 
-![5.Batch By.png](../../Sceenshots/5.Batch%20By.png)
 
 5. postman request GET
    http://localhost:8081/inventory/batches
 
-![6.Batches.png](../../Sceenshots/6.Batches.png)
 
 Order service (base: http://localhost:8082)
-![screencapture-localhost-8082-swagger-ui-index-html-2025-11-23-16_49_47.png](../../Sceenshots/screencapture-localhost-8082-swagger-ui-index-html-2025-11-23-16_49_47.png)
 
 1. http://localhost:8082/order
 
@@ -104,12 +97,11 @@ postman request POST 'http://localhost:8082/order' \
 "sku": "SKU-1",
 "quantity": 2
 }'
-![3.Place Order.png](../../Sceenshots/3.Place%20Order.png)
 
 Important: The Order service depends on the Inventory service to fetch batches and to update inventory. Start the Inventory service before placing orders.
 
-DB Validation:
-Connection details (copy these into the H2 web console login form)
+DB Connection Details:
+copy these into the H2 web console login form
 
 - Inventory JDBC URL:
 
@@ -121,13 +113,6 @@ Connection details (copy these into the H2 web console login form)
 
 - User: sa
 - Password: (leave blank)
-
-![Products Table.png](../../Sceenshots/Products%20Table.png)
-![Inventory Batches Table.png](../../Sceenshots/Inventory%20Batches%20Table.png)
-![Orders Table.png](../../Sceenshots/Orders%20Table.png)
-
-Postman Collection:
-[Order Inventory Collection.postman_collection.json](../../Sceenshots/Order%20Inventory%20Collection.postman_collection.json)
 
 ---
 
