@@ -5,7 +5,6 @@ A simple sample project with two Spring Boot microservices demonstrating an orde
 Modules
 - `inventoryservice` — Inventory microservice (REST API, JPA, H2)
 - `orderservice` — Order microservice (calls inventory via REST client, JPA, H2)
-- `scripts/` — Helpful curl/PowerShell request sequences for manual testing
 
 This README contains: project setup, API documentation for both services, and testing instructions.
 
@@ -42,81 +41,77 @@ Notes:
 
 ## API documentation
 
-This section documents the public REST endpoints for the two services and shows example request bodies and commands.
+This section documents the public REST endpoints for the two services and shows example curl requests.
 
 Inventory service (base: http://localhost:8081)
 
-- POST /inventory/product
-  - Description: Create a Product
-  - Request body:
-    {
-      "sku": "SKU-1",
-      "name": "Product name"
-    }
-  - Response: 201 Created with Product JSON (includes `id`)
-  - Example (curl):
+1. http://localhost:8081/inventory/product
 
-      curl -X POST "http://localhost:8081/inventory/product" -H "Content-Type: application/json" -d '{"sku":"SKU-1","name":"Product name"}'
+postman request POST 'http://localhost:8081/inventory/product' \
+--header 'Content-Type: application/json' \
+--body '{
+"sku": "SKU-1",
+"name": "Test Product"
+}'
 
-- POST /inventory/batch?productId={productId}
-  - Description: Create an inventory batch for a product ID
-  - Request body:
-    {
-      "batchNumber": "BATCH-1",
-      "quantity": 5,
-      "expiryDate": "2025-12-31"
-    }
-  - Response: 201 Created with InventoryBatchDto
-  - Example (curl):
+2. http://localhost:8081/inventory/batch?productId=1
 
-      curl -X POST "http://localhost:8081/inventory/batch?productId=1" -H "Content-Type: application/json" -d '{"batchNumber":"BATCH-1","quantity":5,"expiryDate":"2025-12-31"}'
 
-- GET /inventory/batches?sku={sku}
-  - Description: List all batches for the given SKU
-  - Response: 200 OK with JSON array of InventoryBatchDto
-  - Example (curl):
+postman request POST 'http://localhost:8081/inventory/batch?productId=1' \
+--header 'Content-Type: application/json' \
+--body '{
+"batchNumber": "BATCH-1",
+"quantity": 5,
+"expiryDate": "2025-12-31"
+}'
 
-      curl "http://localhost:8081/inventory/batches?sku=SKU-1"
+3. http://localhost:8081/inventory/update?handlerType=default
 
-- POST /inventory/update?handlerType={handler}
-  - Description: Deduct quantities from specific batches for a SKU. Used by the Order service after allocation.
-  - Query param: `handlerType` (default: `default`)
-  - Request body shape (required):
-    {
-      "sku": "SKU-1",
-      "batchQuantityToDeduct": {
-        "BATCH-1": 3,
-        "BATCH-2": 1
-      }
-    }
-  - Validations and error cases handled by the service (examples):
-    - Missing body or missing SKU -> validation error
-    - Missing or empty `batchQuantityToDeduct` -> validation error
-    - Batch not found for SKU -> validation error
-    - Insufficient qty in batch -> validation error
-  - Response: 200 OK on success (empty body)
-  - Example (curl):
 
-      curl -X POST "http://localhost:8081/inventory/update?handlerType=default" -H "Content-Type: application/json" -d '{"sku":"SKU-1","batchQuantityToDeduct":{"BATCH-1":3}}'
+postman request POST 'http://localhost:8081/inventory/update?handlerType=default' \
+--header 'Content-Type: application/json' \
+--body '{
+"sku": "SKU-1",
+"batchQuantityToDeduct": {
+"BATCH-1": 3
+}
+}
+
+
+4. postman request GET
+   http://localhost:8081/inventory/batches?sku=SKU-1
+
+
+5. postman request GET
+   http://localhost:8081/inventory/batches
+
 
 Order service (base: http://localhost:8082)
 
-- POST /order
-  - Description: Place an order. The service will validate the request, fetch available batches from the Inventory service, allocate quantities (via InventoryAllocator), call the inventory update validator, persist the Order, and return the created order details.
-  - Request body:
-    {
-      "sku": "SKU-1",
-      "quantity": 2
-    }
-  - Response: 200 OK with OrderResponse JSON containing:
-    - `success` (boolean)
-    - `order` (Order entity when success)
-    - `error` (error message when not successful)
-  - Example (curl):
+1. http://localhost:8082/order
 
-      curl -X POST "http://localhost:8080/order" -H "Content-Type: application/json" -d '{"sku":"SKU-1","quantity":2}'
+postman request POST 'http://localhost:8082/order' \
+--header 'Content-Type: application/json' \
+--body '{
+"sku": "SKU-1",
+"quantity": 2
+}'
 
 Important: The Order service depends on the Inventory service to fetch batches and to update inventory. Start the Inventory service before placing orders.
+
+DB Validation:
+Connection details (copy these into the H2 web console login form)
+
+- Inventory JDBC URL:
+
+  jdbc:h2:mem:inventorydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+
+- Order JDBC URL:
+
+  jdbc:h2:mem:orderdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+
+- User: sa
+- Password: (leave blank)
 
 ---
 
