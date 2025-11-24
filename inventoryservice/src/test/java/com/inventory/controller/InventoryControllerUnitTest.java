@@ -2,9 +2,9 @@ package com.inventory.controller;
 
 import com.inventory.dto.InventoryBatchDto;
 import com.inventory.dto.UpdateInventoryRequest;
+import com.inventory.mapper.InventoryBatchMapper;
 import com.inventory.service.InventoryService;
 import com.inventory.validation.BatchQueryValidator;
-import com.inventory.validation.InventoryBatchMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

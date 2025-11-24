@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface InventoryBatchRepository extends JpaRepository<InventoryBatch, Long> {
-    List<InventoryBatch> findByProduct_IdOrderByExpiryDateAsc(Long productId);
+    List<InventoryBatch> findByProductIdOrderByExpiryDateAsc(Long productId);
     Optional<InventoryBatch> findByProductIdAndBatchNumber(Long id, String batchNumber);
 }

@@ -4,11 +4,11 @@ import com.inventory.dto.InventoryBatchDto;
 import com.inventory.dto.UpdateInventoryRequest;
 import com.inventory.entity.InventoryBatch;
 import com.inventory.entity.Product;
+import com.inventory.mapper.InventoryBatchMapper;
+import com.inventory.repository.InventoryBatchRepository;
 import com.inventory.repository.ProductRepository;
 import com.inventory.validation.BaseInventoryValidator;
-import com.inventory.validation.InventoryBatchMapper;
 import com.inventory.validation.InventoryValidationFactory;
-import com.inventory.repository.InventoryBatchRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,24 +65,24 @@ class InventoryServiceImplTest {
         inventoryBatch.setExpiryDate(LocalDate.of(2025,1,1));
         inventoryBatch.setProduct(product);
 
-        when(inventoryBatchRepository.findByProduct_IdOrderByExpiryDateAsc(PRODUCT_ID)).thenReturn(List.of(inventoryBatch));
+        when(inventoryBatchRepository.findByProductIdOrderByExpiryDateAsc(PRODUCT_ID)).thenReturn(List.of(inventoryBatch));
         InventoryBatchDto dto = new InventoryBatchDto();
         when(inventoryBatchMapper.toDto(inventoryBatch)).thenReturn(dto);
 
         List<InventoryBatchDto> dtos = inventoryService.getBatchesByProductId(PRODUCT_ID);
         assertThat(dtos).hasSize(1);
         assertThat(dtos.get(0)).isSameAs(dto);
-        verify(inventoryBatchRepository).findByProduct_IdOrderByExpiryDateAsc(PRODUCT_ID);
+        verify(inventoryBatchRepository).findByProductIdOrderByExpiryDateAsc(PRODUCT_ID);
         verify(inventoryBatchMapper).toDto(inventoryBatch);
     }
 
     @Test
     void getBatchesByProductId_exception() {
-        when(inventoryBatchRepository.findByProduct_IdOrderByExpiryDateAsc(PRODUCT_ID)).thenThrow(new RuntimeException(ERROR_MSG));
+        when(inventoryBatchRepository.findByProductIdOrderByExpiryDateAsc(PRODUCT_ID)).thenThrow(new RuntimeException(ERROR_MSG));
         assertThatThrownBy(() -> inventoryService.getBatchesByProductId(PRODUCT_ID))
             .isInstanceOf(RuntimeException.class)
             .hasMessage(ERROR_MSG);
-        verify(inventoryBatchRepository).findByProduct_IdOrderByExpiryDateAsc(PRODUCT_ID);
+        verify(inventoryBatchRepository).findByProductIdOrderByExpiryDateAsc(PRODUCT_ID);
     }
 
     @Test

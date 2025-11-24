@@ -4,12 +4,12 @@ import com.inventory.dto.InventoryBatchDto;
 import com.inventory.dto.UpdateInventoryRequest;
 import com.inventory.entity.InventoryBatch;
 import com.inventory.entity.Product;
-import com.inventory.validation.BaseInventoryValidator;
-import com.inventory.validation.InventoryBatchMapper;
-import com.inventory.validation.InventoryValidationFactory;
+import com.inventory.handlers.ProductNotFoundException;
+import com.inventory.mapper.InventoryBatchMapper;
 import com.inventory.repository.InventoryBatchRepository;
 import com.inventory.repository.ProductRepository;
-import com.inventory.handlers.ProductNotFoundException;
+import com.inventory.validation.BaseInventoryValidator;
+import com.inventory.validation.InventoryValidationFactory;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public List<InventoryBatchDto> getBatchesByProductId(Long productId) {
-        List<InventoryBatch> batches = inventoryBatchRepository.findByProduct_IdOrderByExpiryDateAsc(productId);
+        List<InventoryBatch> batches = inventoryBatchRepository.findByProductIdOrderByExpiryDateAsc(productId);
         return batches.stream().map(inventoryBatchMapper::toDto).collect(Collectors.toList());
     }
 

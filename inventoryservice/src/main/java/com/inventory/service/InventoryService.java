@@ -1,7 +1,7 @@
 package com.inventory.service;
 
-import com.inventory.dto.UpdateInventoryRequest;
 import com.inventory.dto.InventoryBatchDto;
+import com.inventory.dto.UpdateInventoryRequest;
 import com.inventory.entity.InventoryBatch;
 import com.inventory.entity.Product;
 
