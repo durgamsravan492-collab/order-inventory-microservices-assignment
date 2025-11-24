@@ -5,7 +5,6 @@ A simple sample project with two Spring Boot microservices demonstrating an orde
 Modules
 - `inventoryservice` — Inventory microservice (REST API, JPA, H2)
 - `orderservice` — Order microservice (calls inventory via REST client, JPA, H2)
-- `scripts/` — Helpful curl/PowerShell request sequences for manual testing
 
 This README contains: project setup, API documentation for both services, and testing instructions.
 
@@ -33,7 +32,7 @@ Run Order service only:
     mvn -pl orderservice spring-boot:run
 
 Notes:
-- Example service ports used in this README and `scripts/inventory_update_requests.txt`:
+- Example service ports used in this README:
   - Inventory service: `http://localhost:8081`
   - Order service: `http://localhost:8082`
 - If you need to change ports or other properties, see each module's `src/main/resources/application.yml`.
